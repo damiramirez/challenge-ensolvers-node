@@ -6,14 +6,8 @@ const getTasks = async (req, res) => {
     await Task.find(),
   ]);
 
-  if (!tasks) {
-    return res.status(400).json({
-      message: 'Tasks not found',
-    });
-  }
-
-  if (tasks.length === 0) {
-    res.json({
+  if (total === 0) {
+    return res.json({
       message: 'No task',
     });
   }
@@ -57,7 +51,6 @@ const updateTask = async (req, res) => {
 
   res.json({
     task,
-    completed,
   });
 };
 

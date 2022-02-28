@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 
 const { dbConnection } = require('../database/config');
 const taskRouter = require('../routes/task');
@@ -23,12 +24,14 @@ class Server {
     await dbConnection();
   }
 
-  routes() {
-    this.app.use(this.path.task, taskRouter);
+  middlewares() {
+    this.app.use(cors());
+
+    this.app.use(express.json());
   }
 
-  middlewares() {
-    this.app.use(express.json());
+  routes() {
+    this.app.use(this.path.task, taskRouter);
   }
 
   listen() {
