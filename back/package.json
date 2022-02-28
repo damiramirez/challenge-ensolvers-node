@@ -1,0 +1,14 @@
+{
+  "name": "challenge-back-ensolvers",
+  "version": "1.0.0",
+  "description": "Backend Challenge with Node, Express and Mongo.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Damian Ramirez",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
