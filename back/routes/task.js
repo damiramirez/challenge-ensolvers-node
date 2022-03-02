@@ -1,5 +1,4 @@
 const { Router } = require('express');
-const { check } = require('express-validator');
 
 const {
   getTasks,
@@ -9,13 +8,12 @@ const {
   getTask,
   updateComplete,
 } = require('../controllers/task');
-const { taskExistById } = require('../helpers/db-validator');
-const { validateInputs } = require('../middlewares/validate-inputs');
+
 const {
   validateCreate,
   validateUpdate,
   validateId,
-} = require('../validators/users');
+} = require('../validators/task');
 
 const router = Router();
 

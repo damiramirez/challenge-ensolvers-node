@@ -5,15 +5,16 @@ const {
   createFolder,
   deleteFolder,
 } = require('../controllers/folder');
+const { validateId, validateCreate } = require('../validators/folder');
 
 const router = Router();
 
 router.get('/', getFolders);
 
-router.get('/:id', getFolder);
+router.get('/:id', validateId, getFolder);
 
-router.post('/', createFolder);
+router.post('/', validateCreate, createFolder);
 
-router.delete('/:id', deleteFolder);
+router.delete('/:id', validateId, deleteFolder);
 
 module.exports = router;

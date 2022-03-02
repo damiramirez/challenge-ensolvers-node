@@ -99,8 +99,6 @@ const deleteTask = async (req, res) => {
   const { id } = req.params;
 
   try {
-    // TODO: SI borro una nota, debo borrarla tambien de las carpetas
-
     const task = await Task.findByIdAndRemove(id);
 
     const idFolder = task.folder;
