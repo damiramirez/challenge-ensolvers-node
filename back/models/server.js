@@ -8,7 +8,7 @@ const taskRouter = require('../routes/task');
 class Server {
   constructor() {
     this.app = express();
-    this.port = process.env.PORT;
+    this.port = process.env.PORT || 8080;
     this.path = {
       task: '/api/task',
     };
@@ -36,7 +36,7 @@ class Server {
 
   listen() {
     this.app.listen(this.port, () => {
-      console.log(`Server listening on port ${this.port}`);
+      console.log(`Server on port ${this.port}`);
     });
   }
 }

@@ -7,9 +7,15 @@ const {
   updateTask,
   deleteTask,
   getTask,
+  updateComplete,
 } = require('../controllers/task');
 const { taskExistById } = require('../helpers/db-validator');
 const { validateInputs } = require('../middlewares/validate-inputs');
+const {
+  validateCreate,
+  validateUpdate,
+  validateId,
+} = require('../validators/users');
 
 const router = Router();
 
@@ -17,51 +23,14 @@ const router = Router();
 
 router.get('/', getTasks);
 
-router.get(
-  '/:id',
-  [
-    check('id').custom(taskExistById),
-    check('id', 'ID is not a MongoId').isMongoId(),
-    validateInputs,
-  ],
-  getTask
-);
+router.get('/:id', validateId, getTask);
 
-router.post(
-  '/',
-  [
-    check('description', 'Description is required').trim().not().isEmpty(),
-    validateInputs,
-  ],
-  createTask
-);
+router.post('/', validateCreate, createTask);
 
-router.put(
-  '/:id',
-  [
-    check('id').custom(taskExistById),
-    check('id', 'ID is not a MongoId').isMongoId(),
-    check('description', 'Description must be a string')
-      .trim()
-      .optional()
-      .isString(),
-    check('completed', 'Completed must be a boolean')
-      .trim()
-      .optional()
-      .isBoolean(),
-    validateInputs,
-  ],
-  updateTask
-);
+router.put('/:id', validateUpdate, updateTask);
 
-router.delete(
-  '/:id',
-  [
-    check('id').custom(taskExistById),
-    check('id', 'ID is not a MongoId').isMongoId(),
-    validateInputs,
-  ],
-  deleteTask
-);
+router.put('/complete/:id', validateId, updateComplete);
+
+router.delete('/:id', validateId, deleteTask);
 
 module.exports = router;
