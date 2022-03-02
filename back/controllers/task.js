@@ -1,5 +1,6 @@
 const Task = require('../models/task');
 const { httpError } = require('../helpers/error-htpp');
+const Folder = require('../models/folder');
 
 const getTasks = async (req, res) => {
   const { limit = 3, skip = 0 } = req.query;
@@ -7,7 +8,7 @@ const getTasks = async (req, res) => {
   try {
     const [total, tasks] = await Promise.all([
       await Task.countDocuments(),
-      await Task.find().limit(limit).skip(skip),
+      await Task.find().populate('folder').limit(limit).skip(skip),
     ]);
 
     if (total === 0) {
@@ -29,7 +30,7 @@ const getTask = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const task = await Task.findById(id);
+    const task = await Task.findById(id).populate('folder');
 
     res.json({
       task,
@@ -40,11 +41,16 @@ const getTask = async (req, res) => {
 };
 
 const createTask = async (req, res) => {
-  const { description } = req.body;
+  const { description, folderId } = req.body;
 
   try {
-    const task = new Task({ description });
+    const folder = await Folder.findById(folderId);
+
+    const task = new Task({ description, folder: folder._id });
     await task.save();
+
+    folder.tasks = folder.tasks.concat(task._id);
+    await folder.save();
 
     res.status(201).json({
       task,
@@ -93,7 +99,15 @@ const deleteTask = async (req, res) => {
   const { id } = req.params;
 
   try {
+    // TODO: SI borro una nota, debo borrarla tambien de las carpetas
+
     const task = await Task.findByIdAndRemove(id);
+
+    const idFolder = task.folder;
+    const folder = await Folder.findById(idFolder);
+    folder.tasks = folder.tasks.filter((task) => task.toJSON() !== id);
+    await folder.save();
+
     res.json({
       deleted: true,
       task,

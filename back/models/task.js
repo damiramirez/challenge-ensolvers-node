@@ -9,6 +9,10 @@ const TaskSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  folder: {
+    type: Schema.Types.ObjectId,
+    ref: 'Folder',
+  },
 });
 
 module.exports = model('Task', TaskSchema);
