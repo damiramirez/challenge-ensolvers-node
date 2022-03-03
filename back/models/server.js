@@ -5,6 +5,7 @@ const cors = require('cors');
 const { dbConnection } = require('../database/config');
 const taskRouter = require('../routes/task');
 const folderRouter = require('../routes/folder');
+const authRouter = require('../routes/auth');
 
 class Server {
   constructor() {
@@ -13,6 +14,7 @@ class Server {
     this.path = {
       task: '/api/task',
       folder: '/api/folder',
+      auth: '/api/auth',
     };
 
     this.connectDB();
@@ -33,6 +35,7 @@ class Server {
   }
 
   routes() {
+    this.app.use(this.path.auth, authRouter);
     this.app.use(this.path.folder, folderRouter);
     this.app.use(this.path.task, taskRouter);
   }

@@ -5,6 +5,11 @@ const FolderSchema = new Schema({
     type: String,
     required: true,
   },
+  username: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
   tasks: [
     {
       type: Schema.Types.ObjectId,

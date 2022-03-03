@@ -7,6 +7,7 @@ const getFolders = async (req, res) => {
 
   try {
     const folders = await Folder.find()
+      .populate('username', 'username')
       .populate('tasks')
       .limit(limit)
       .skip(skip);
@@ -23,7 +24,9 @@ const getFolder = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const folder = await Folder.findById(id).populate('tasks');
+    const folder = await Folder.findById(id)
+      .populate('username', 'username')
+      .populate('tasks');
 
     res.json({
       folder,
@@ -37,7 +40,12 @@ const createFolder = async (req, res) => {
   const { name } = req.body;
 
   try {
-    const folder = new Folder({ name });
+    const data = {
+      name,
+      username: req.user.id,
+    };
+
+    const folder = new Folder(data);
     await folder.save();
 
     res.status(201).json({

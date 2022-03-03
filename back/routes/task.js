@@ -8,6 +8,7 @@ const {
   getTask,
   updateComplete,
 } = require('../controllers/task');
+const { validateJWT } = require('../middlewares/validate-jwt');
 
 const {
   validateCreate,
@@ -19,7 +20,7 @@ const router = Router();
 
 // Route /api/task
 
-router.get('/', getTasks);
+router.get('/', validateJWT, getTasks);
 
 router.get('/:id', validateId, getTask);
 
